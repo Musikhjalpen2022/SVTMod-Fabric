@@ -113,7 +113,8 @@ public class Screen implements PacketByteBufSerializable<Screen> {
     public void loadVideo(Video video) {
         this.video = video;
         closeBrowser();
-        browser = CefUtil.createBrowser(video.getVideoInfo().getVideoService().getUrl(), this);
+        //browser = CefUtil.createBrowser(video.getVideoInfo().getVideoService().getUrl(), this);
+        browser = CefUtil.createBrowser("https://www.svtplay.se/kanaler/svt1?start=auto", this);
     }
 
     public void closeBrowser() {

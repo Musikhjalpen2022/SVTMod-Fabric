@@ -3,10 +3,18 @@ package com.cinemamod.fabric.cef;
 import com.cinemamod.fabric.CinemaModClient;
 import com.cinemamod.fabric.screen.Screen;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
+import net.minecraft.client.MinecraftClient;
 import org.cef.CefApp;
 import org.cef.CefClient;
 import org.cef.CefSettings;
 import org.cef.browser.CefBrowserOsr;
+import org.cef.network.CefCookie;
+import org.cef.network.CefCookieManager;
+
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Calendar;
+import java.util.Date;
 
 public final class CefUtil {
 
@@ -35,6 +43,7 @@ public final class CefUtil {
         cefAppInstance = CefApp.getInstance(cefSwitches, cefSettings);
         cefClientInstance = cefAppInstance.createClient();
         cefClientInstance.addLoadHandler(new LoadHandler());
+
 
         return init = true;
     }
@@ -73,6 +82,21 @@ public final class CefUtil {
 
     public static CefBrowserOsr createBrowser(String startUrl, Screen screen) {
         if (!init) {
+            return null;
+        }
+
+        CefCookie cookie = new CefCookie("cookie-consent-1",
+                "{\"required_storage\":true,\"functionality_storage\":false,\"statistics_storage\":false,\"ad_storage\":false}",
+                "www.svtplay.se",
+                "/",
+                false,
+                false,
+                null,
+                null,
+                false,
+                null);
+        boolean success = CefCookieManager.getGlobalManager().setCookie("https://www.svtplay.se", cookie);
+        if (!success) {
             return null;
         }
 
