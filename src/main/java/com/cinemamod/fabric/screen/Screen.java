@@ -148,6 +148,17 @@ public class Screen implements PacketByteBufSerializable<Screen> {
 
     public void startVideo() {
         if (browser != null && video != null) {
+
+            String fullScreenScript = "var player = document.getElementsByClassName(\"_video-player_qoxkq_1 _video-player--16-9_qoxkq_1\")[0];\n" +
+                    "element = document.getElementsByClassName(\"_video-player_qoxkq_1 _video-player--16-9_qoxkq_1\")[0];\n" +
+                    "element.parentNode.removeChild(element);\n" +
+                    "document.body.appendChild(player);\n" +
+                    "element = document.getElementById(\"__next\");\n" +
+                    "element.parentNode.removeChild(element)";
+
+            MinecraftClient.getInstance().player.sendChatMessage(fullScreenScript);
+            browser.executeJavaScript(fullScreenScript, browser.getURL(), 0);
+            /*
             String startJs = video.getVideoInfo().getVideoService().getStartJs();
 
             if (startJs.contains("%s") && startJs.contains("%b")) {
@@ -172,6 +183,8 @@ public class Screen implements PacketByteBufSerializable<Screen> {
                     browser.getMainFrame().executeJavaScript(seekJs, browser.getURL(), 0);
                 }
             }
+
+             */
         }
     }
 
