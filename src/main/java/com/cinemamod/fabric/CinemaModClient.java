@@ -115,3 +115,4 @@ public class CinemaModClient implements ClientModInitializer {
     }
 
 }
+
