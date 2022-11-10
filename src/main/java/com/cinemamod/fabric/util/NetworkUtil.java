@@ -15,6 +15,7 @@ import com.cinemamod.fabric.video.list.VideoList;
 import com.cinemamod.fabric.video.list.VideoListEntry;
 import io.netty.buffer.Unpooled;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
@@ -52,14 +53,17 @@ public final class NetworkUtil {
         });
         ClientPlayNetworking.registerGlobalReceiver(CHANNEL_SCREENS, (client, handler, buf, responseSender) -> {
             int length = buf.readInt();
+            MinecraftClient.getInstance().player.sendChatMessage("Adding " + length + " screens");
             for (int i = 0; i < length; i++)
                 CD.getScreenManager().registerScreen(new Screen().fromBytes(buf));
         });
         ClientPlayNetworking.registerGlobalReceiver(CHANNEL_LOAD_SCREEN, (client, handler, buf, responseSender) -> {
             BlockPos pos = new BlockPos(buf.readInt(), buf.readInt(), buf.readInt());
             Screen screen = CD.getScreenManager().getScreen(pos);
+            MinecraftClient.getInstance().player.sendChatMessage("display on screen:" + screen);
             if (screen == null) return;
             Video video = new Video().fromBytes(buf);
+            MinecraftClient.getInstance().player.sendChatMessage("load screen:" + video);
             client.submit(() -> screen.loadVideo(video));
         });
         ClientPlayNetworking.registerGlobalReceiver(CHANNEL_UNLOAD_SCREEN, (client, handler, buf, responseSender) -> {
@@ -73,6 +77,7 @@ public final class NetworkUtil {
             PreviewScreen previewScreen = new PreviewScreen().fromBytes(buf);
             VideoInfo videoInfo = buf.readBoolean() ? new VideoInfo().fromBytes(buf) : null;
             previewScreen.setVideoInfo(videoInfo);
+            MinecraftClient.getInstance().player.sendChatMessage("viewing:" + videoInfo);
             if (manager.getPreviewScreen(previewScreen.getBlockPos()) == null)
                 manager.addPreviewScreen(previewScreen);
             else
