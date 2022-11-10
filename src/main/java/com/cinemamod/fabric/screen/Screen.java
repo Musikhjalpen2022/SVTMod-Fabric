@@ -14,6 +14,7 @@ import org.cef.browser.CefBrowserOsr;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class Screen implements PacketByteBufSerializable<Screen> {
 
@@ -112,9 +113,19 @@ public class Screen implements PacketByteBufSerializable<Screen> {
 
     public void loadVideo(Video video) {
         this.video = video;
+        MinecraftClient.getInstance().player.sendChatMessage("Screen show: " + video);
         closeBrowser();
-        //browser = CefUtil.createBrowser(video.getVideoInfo().getVideoService().getUrl(), this);
-        browser = CefUtil.createBrowser("https://www.svtplay.se/kanaler/svt1?start=auto", this);
+        visible = false;
+
+        String url = video.getVideoInfo().getVideoService().getUrl();
+        if (url.contains("%s")) {
+            url = String.format(url, video.getVideoInfo().getId());
+        }
+
+        browser = CefUtil.createBrowser(url, this);
+
+
+        //browser = CefUtil.createBrowser("https://www.svtplay.se/kanaler/svt1?start=auto", this);
     }
 
     public void closeBrowser() {
@@ -139,7 +150,7 @@ public class Screen implements PacketByteBufSerializable<Screen> {
 
             // 0.00-1.00 volume
             else if (js.contains("%f")) {
-                js = String.format(js, volume);
+                js = String.format(Locale.US, js, volume);
             }
 
             browser.getMainFrame().executeJavaScript(js, browser.getURL(), 0);
@@ -148,7 +159,7 @@ public class Screen implements PacketByteBufSerializable<Screen> {
 
     public void startVideo() {
         if (browser != null && video != null) {
-
+            /*
             String fullScreenScript = "var player = document.getElementsByClassName(\"_video-player_qoxkq_1 _video-player--16-9_qoxkq_1\")[0];\n" +
                     "element = document.getElementsByClassName(\"_video-player_qoxkq_1 _video-player--16-9_qoxkq_1\")[0];\n" +
                     "element.parentNode.removeChild(element);\n" +
@@ -156,9 +167,8 @@ public class Screen implements PacketByteBufSerializable<Screen> {
                     "element = document.getElementById(\"__next\");\n" +
                     "element.parentNode.removeChild(element)";
 
-            MinecraftClient.getInstance().player.sendChatMessage(fullScreenScript);
             browser.executeJavaScript(fullScreenScript, browser.getURL(), 0);
-            /*
+            */
             String startJs = video.getVideoInfo().getVideoService().getStartJs();
 
             if (startJs.contains("%s") && startJs.contains("%b")) {
@@ -183,8 +193,7 @@ public class Screen implements PacketByteBufSerializable<Screen> {
                     browser.getMainFrame().executeJavaScript(seekJs, browser.getURL(), 0);
                 }
             }
-
-             */
+            visible = true;
         }
     }
 

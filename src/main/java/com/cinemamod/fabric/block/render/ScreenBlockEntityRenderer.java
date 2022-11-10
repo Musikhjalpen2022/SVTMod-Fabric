@@ -22,7 +22,7 @@ public class ScreenBlockEntityRenderer implements BlockEntityRenderer<ScreenBloc
     public void render(ScreenBlockEntity entity, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
         ScreenManager screenManager = CinemaModClient.getInstance().getScreenManager();
         Screen screen = screenManager.getScreen(entity.getPos());
-        if (screen == null || !screen.isVisible()) return;
+        if (screen == null) return;
         RenderSystem.enableDepthTest();
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder buffer = tessellator.getBuffer();
@@ -36,7 +36,7 @@ public class ScreenBlockEntityRenderer implements BlockEntityRenderer<ScreenBloc
         RenderUtil.moveForward(matrices, screen.getFacing(), 0.008f);
         RenderUtil.fixRotation(matrices, screen.getFacing());
         matrices.scale(screen.getWidth(), screen.getHeight(), 0);
-        if (screen.hasBrowser()) {
+        if (screen.hasBrowser() && screen.isVisible()) {
             int glId = screen.getBrowser().renderer_.texture_id_[0];
             RenderUtil.renderTexture(matrices, tessellator, buffer, glId);
         } else {
