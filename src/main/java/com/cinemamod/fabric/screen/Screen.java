@@ -140,7 +140,7 @@ public class Screen implements PacketByteBufSerializable<Screen> {
     }
 
     public void setVideoVolume(float volume) {
-        if (browser != null && video != null) {
+        if (browser != null && video != null && browser.getMainFrame() != null) {
             String js = video.getVideoInfo().getVideoService().getSetVolumeJs();
 
 
@@ -153,10 +153,10 @@ public class Screen implements PacketByteBufSerializable<Screen> {
             else if (js.contains("%f")) {
                 js = String.format(Locale.US, js, volume);
             }
-            MinecraftClient.getInstance().player.sendChatMessage(js);
             browser.getMainFrame().executeJavaScript(js, browser.getURL(), 0);
         }
     }
+
 
     public void startVideo() {
         if (browser != null && video != null) {
