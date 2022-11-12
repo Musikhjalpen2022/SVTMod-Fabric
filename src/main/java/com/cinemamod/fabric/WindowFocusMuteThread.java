@@ -33,15 +33,13 @@ public class WindowFocusMuteThread extends Thread {
                 previousState = MinecraftClient.getInstance().isWindowFocused();
             }
 
-            if (CinemaModClient.getInstance().getScreenManager().hasActiveScreen()) {
-                for (Screen screen : CinemaModClient.getInstance().getScreenManager().getScreens()) {
-                    Vec3d playerPos = MinecraftClient.getInstance().player.getPos();
-                    BlockPos screenPos = screen.getPos();
-                    double distD = Math.sqrt(Math.pow(playerPos.x - screenPos.getX(), 2) + Math.pow(playerPos.y - screenPos.getY(), 2) + Math.pow(playerPos.z - (screenPos.getZ()), 2));
-                    float dist = (float)distD;
-                    MinecraftClient.getInstance().player.sendChatMessage(String.valueOf(1f-(dist/30f)));
-                    screen.setVideoVolume((1f - (dist/30f)));
-                }
+            for (Screen screen : CinemaModClient.getInstance().getScreenManager().getScreens()) {
+                Vec3d playerPos = MinecraftClient.getInstance().player.getPos();
+                BlockPos screenPos = screen.getPos();
+                double distD = Math.sqrt(Math.pow(playerPos.x - screenPos.getX(), 2) + Math.pow(playerPos.y - screenPos.getY(), 2) + Math.pow(playerPos.z - (screenPos.getZ()), 2));
+                float dist = (float)distD;
+                MinecraftClient.getInstance().player.sendChatMessage(String.valueOf(1f-(dist/30f)));
+                screen.setVideoVolume((1f - (dist/30f)));
             }
 
             try {

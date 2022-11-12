@@ -31,7 +31,7 @@ public class LoadHandler implements CefLoadHandler {
         if (screen.isMuted()) {
             screen.setVideoVolume(0);
         } else {
-            screen.setVideoVolume(CinemaModClient.getInstance().getVideoSettings().getVolume());
+            //screen.setVideoVolume(CinemaModClient.getInstance().getVideoSettings().getVolume());
         }
     }
 

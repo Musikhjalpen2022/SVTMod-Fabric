@@ -30,7 +30,7 @@ public class VideoSettingsScreen extends Screen {
             @Override
             protected void applyValue() {
                 for (com.cinemamod.fabric.screen.Screen screen : CinemaModClient.getInstance().getScreenManager().getScreens())
-                    screen.setVideoVolume((float) value);
+                    //screen.setVideoVolume((float) value);
                 CinemaModClient.getInstance().getVideoSettings().setVolume((float) value);
             }
         });
