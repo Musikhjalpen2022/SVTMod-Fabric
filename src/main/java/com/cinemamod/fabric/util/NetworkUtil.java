@@ -14,8 +14,11 @@ import com.cinemamod.fabric.video.VideoInfo;
 import com.cinemamod.fabric.video.list.VideoList;
 import com.cinemamod.fabric.video.list.VideoListEntry;
 import io.netty.buffer.Unpooled;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
@@ -39,6 +42,7 @@ public final class NetworkUtil {
     private static final Identifier CHANNEL_VIDEO_LIST_PLAYLIST_SPLIT = new Identifier(CinemaMod.MODID, "video_list_playlist_split");
     private static final Identifier CHANNEL_VIDEO_QUEUE_STATE = new Identifier(CinemaMod.MODID, "video_queue_state");
     /* OUTGOING */
+    private static final Identifier CHANNEL_SCREEN_RECEIVED = new Identifier(CinemaMod.MODID, "screen_received");
     private static final Identifier CHANNEL_VIDEO_REQUEST = new Identifier(CinemaMod.MODID, "video_request");
     private static final Identifier CHANNEL_VIDEO_HISTORY_REMOVE = new Identifier(CinemaMod.MODID, "video_history_remove");
     private static final Identifier CHANNEL_VIDEO_QUEUE_VOTE = new Identifier(CinemaMod.MODID, "video_queue_vote");
@@ -56,6 +60,7 @@ public final class NetworkUtil {
             MinecraftClient.getInstance().player.sendChatMessage("Adding " + length + " screens");
             for (int i = 0; i < length; i++)
                 CD.getScreenManager().registerScreen(new Screen().fromBytes(buf));
+            sendScreenReceivedPacket();
         });
         ClientPlayNetworking.registerGlobalReceiver(CHANNEL_LOAD_SCREEN, (client, handler, buf, responseSender) -> {
             BlockPos pos = new BlockPos(buf.readInt(), buf.readInt(), buf.readInt());
@@ -108,6 +113,14 @@ public final class NetworkUtil {
                 }
             });
         });
+    }
+
+
+    public static void sendScreenReceivedPacket() {
+        MinecraftClient.getInstance().player.sendChatMessage("Sending join message");
+        PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
+        buf.writeString("thanks");
+        ClientPlayNetworking.send(CHANNEL_SCREEN_RECEIVED, buf);
     }
 
     public static void sendVideoRequestPacket(VideoInfo videoInfo) {
