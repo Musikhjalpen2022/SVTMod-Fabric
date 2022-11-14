@@ -14,36 +14,39 @@ public class WindowFocusMuteThread extends Thread {
         setName("window-focus-cef-mute-thread");
     }
 
+    public void setDynamicVolumeForAllScreens(){
+        for (Screen screen : CinemaModClient.getInstance().getScreenManager().getScreens()) {
+            Vec3d playerPos = MinecraftClient.getInstance().player.getPos();
+            BlockPos screenPos = screen.getPos();
+            float distD = (float) Math.sqrt(Math.pow(playerPos.x - screenPos.getX(), 2) + Math.pow(playerPos.z - screenPos.getZ(), 2));
+            float scale = 8; //How steep should the volume curve be? Lower->steeper (Rasmus boring explanation is distance for half volume)
+            float distanceVolume = scale/(scale+distD);
+            /*
+            float distanceVolume = 1f - (distD / 30f);
+            distanceVolume = Math.max(0f, distanceVolume);
+            */
+            screen.setVideoVolume(CinemaModClient.getInstance().getVideoSettings().getVolume() * distanceVolume);
+        }
+    }
+
     @Override
     public void run() {
         try {
             while (MinecraftClient.getInstance().isRunning()) {
                 if (CinemaModClient.getInstance().getVideoSettings().isMuteWhenAltTabbed()) {
-                    if (MinecraftClient.getInstance().isWindowFocused() && !previousState) {
-                        // if currently focused and was previously not focused
-                        for (Screen screen : CinemaModClient.getInstance().getScreenManager().getScreens()) {
-                            screen.setVideoVolume(CinemaModClient.getInstance().getVideoSettings().getVolume());
-                        }
+                    if (MinecraftClient.getInstance().isWindowFocused()) {
+                        setDynamicVolumeForAllScreens();
                     } else if (!MinecraftClient.getInstance().isWindowFocused() && previousState) {
                         // if not focused and was previous focused
                         for (Screen screen : CinemaModClient.getInstance().getScreenManager().getScreens()) {
                             screen.setVideoVolume(0f);
                         }
-                    } else {
-                        for (Screen screen : CinemaModClient.getInstance().getScreenManager().getScreens()) {
-
-                            float distance = 1f;
-                            Vec3d playerPos = MinecraftClient.getInstance().player.getPos();
-                            BlockPos screenPos = screen.getPos();
-                            float distD = (float) Math.sqrt(Math.pow(playerPos.x - screenPos.getX(), 2) + Math.pow(playerPos.z - screenPos.getZ(), 2));
-                            float distanceVolume = 1f - (distD / 30f);
-                            distanceVolume = Math.max(0f, distanceVolume);
-                            screen.setVideoVolume(CinemaModClient.getInstance().getVideoSettings().getVolume() * distanceVolume);
-                        }
                     }
-
-                    previousState = MinecraftClient.getInstance().isWindowFocused();
+                    }
+                else{
+                    setDynamicVolumeForAllScreens();
                 }
+                previousState = MinecraftClient.getInstance().isWindowFocused();
 
                 try {
                     Thread.sleep(250);
@@ -52,7 +55,7 @@ public class WindowFocusMuteThread extends Thread {
                 }
             }
         } catch (Exception e){
-            MinecraftClient.getInstance().player.sendChatMessage(e.toString());
+            e.printStackTrace();
         }
     }
 

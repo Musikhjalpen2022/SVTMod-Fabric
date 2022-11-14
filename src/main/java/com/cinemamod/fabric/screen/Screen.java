@@ -113,7 +113,6 @@ public class Screen implements PacketByteBufSerializable<Screen> {
 
     public void loadVideo(Video video) {
         this.video = video;
-        MinecraftClient.getInstance().player.sendChatMessage("Screen show: " + video);
         closeBrowser();
         visible = false;
 
