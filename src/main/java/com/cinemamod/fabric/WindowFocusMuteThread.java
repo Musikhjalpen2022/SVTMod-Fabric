@@ -31,8 +31,8 @@ public class WindowFocusMuteThread extends Thread {
 
     @Override
     public void run() {
-        try {
-            while (MinecraftClient.getInstance().isRunning()) {
+        while (true) {
+            try {
                 if (CinemaModClient.getInstance().getVideoSettings().isMuteWhenAltTabbed()) {
                     if (MinecraftClient.getInstance().isWindowFocused()) {
                         setDynamicVolumeForAllScreens();
@@ -42,20 +42,17 @@ public class WindowFocusMuteThread extends Thread {
                             screen.setVideoVolume(0f);
                         }
                     }
-                    }
-                else{
+                } else {
                     setDynamicVolumeForAllScreens();
                 }
                 previousState = MinecraftClient.getInstance().isWindowFocused();
+            } catch (Exception ignored) { }
 
-                try {
-                    Thread.sleep(250);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+            try {
+                Thread.sleep(250);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
-        } catch (Exception e){
-            e.printStackTrace();
         }
     }
 

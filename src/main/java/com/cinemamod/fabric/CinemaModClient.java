@@ -16,6 +16,7 @@ import com.cinemamod.fabric.util.NetworkUtil;
 import com.cinemamod.fabric.video.list.VideoListManager;
 import com.cinemamod.fabric.video.queue.VideoQueue;
 import net.fabricmc.api.ClientModInitializer;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.util.Util;
 import org.cef.OS;
 
