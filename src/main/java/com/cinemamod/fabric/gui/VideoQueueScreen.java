@@ -113,7 +113,7 @@ public class VideoQueueScreen extends Screen {
             if (!CinemaModClient.getInstance().getScreenManager().hasActiveScreen()) return;
 
             if (keyBinding.wasPressed()) {
-                client.setScreen(new VideoQueueScreen());
+                client.setScreen(new VideoSettingsScreen());
             }
         });
     }
