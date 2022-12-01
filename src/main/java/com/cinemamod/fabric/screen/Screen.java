@@ -158,7 +158,7 @@ public class Screen implements PacketByteBufSerializable<Screen> {
 
 
     public void startVideo() {
-        MinecraftClient.getInstance().player.sendChatMessage("Starting video", null);
+        //MinecraftClient.getInstance().player.sendChatMessage("Starting video", null);
         if (browser != null && video != null) {
             /*
             String fullScreenScript = "var player = document.getElementsByClassName(\"_video-player_qoxkq_1 _video-player--16-9_qoxkq_1\")[0];\n" +
