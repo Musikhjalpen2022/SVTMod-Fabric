@@ -2,9 +2,11 @@ package com.cinemamod.downloader;
 
 public final class Resource {
 
-    public static final String CINEMAMOD_VERSIONS_URL = "https://cinemamod-libraries.ewr1.vultrobjects.com/versions.txt";
-    public static final String CINEMAMOD_JCEF_URL_FORMAT = "https://cinemamod-libraries.ewr1.vultrobjects.com/jcef/%s/%s";
-    public static final String CINEMAMOD_JCEF_PATCHES_URL_FORMAT = "https://cinemamod-libraries.ewr1.vultrobjects.com/jcef-patches/%s/%s";
+    public static final String BASE_URL = "http://129.151.206.9:8000/";
+    //public static final String BASE_URL = "https://cinemamod-libraries.ewr1.vultrobjects.com/";
+    public static final String CINEMAMOD_VERSIONS_URL = BASE_URL + "versions.txt";
+    public static final String CINEMAMOD_JCEF_URL_FORMAT = BASE_URL + "jcef/%s/%s";
+    public static final String CINEMAMOD_JCEF_PATCHES_URL_FORMAT = BASE_URL + "jcef-patches/%s/%s";
 
     public static String getJcefUrl(String cefBranch, String platform) {
         return CINEMAMOD_JCEF_URL_FORMAT.formatted(cefBranch, platform);
