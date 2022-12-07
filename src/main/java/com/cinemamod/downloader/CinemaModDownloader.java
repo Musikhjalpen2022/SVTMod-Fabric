@@ -233,9 +233,9 @@ public class CinemaModDownloader extends Thread {
             }
         }
 
-        CinemaMod.LOGGER.info("CinemaMod library versions " + versions.toString());
+        CinemaMod.LOGGER.info("SVTMod library versions " + versions.toString());
 
-        jcefVersionLabel.setText("Current CinemaMod CEF branch: " + versions.getProperty("jcef"));
+        jcefVersionLabel.setText("Current SVTMod CEF branch: " + versions.getProperty("jcef"));
 
         final String platform;
 
@@ -278,7 +278,7 @@ public class CinemaModDownloader extends Thread {
         JFrame frame = new JFrame();
         frame.setSize(600, 300);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        frame.setTitle("CinemaMod Downloader");
+        frame.setTitle("SVTMod Downloader");
 
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new GridLayout(4, 1));
@@ -289,7 +289,7 @@ public class CinemaModDownloader extends Thread {
 
         try {
             BufferedImage image = ImageIO.read(CinemaModDownloader.class.getResourceAsStream("/assets/cinemamod/icon.png"));
-            Image scaledImage = image.getScaledInstance(80, 63, Image.SCALE_SMOOTH);
+            Image scaledImage = image.getScaledInstance(80, 80, Image.SCALE_DEFAULT);
             iconPanel.add(new JLabel(new ImageIcon(scaledImage)));
         } catch (IOException e) {
             e.printStackTrace();
